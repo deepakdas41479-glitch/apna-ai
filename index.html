@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="Apna AI - smart public web search assistant">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Apna AI</title>
+<style>
+:root{--bg:#0b1020;--panel:#151c30;--panel2:#1c2740;--text:#f4f7ff;--muted:#a9b5cf;--accent:#7c9cff;--line:#2b3857}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1000px 500px at 50% -10%,#24365f 0%,var(--bg) 60%);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);min-height:100dvh}
+.app{max-width:760px;margin:auto;min-height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom)}
+header{display:flex;align-items:center;gap:12px;padding:18px 4px 14px;border-bottom:1px solid var(--line)}
+.logo{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#7596ff,#9d6bff);font-size:24px;box-shadow:0 8px 28px #536eff30}
+h1{font-size:20px;margin:0} .sub{font-size:12px;color:var(--muted);margin-top:2px}.status{margin-left:auto;font-size:11px;color:#b9f5d0;border:1px solid #2d7554;border-radius:20px;padding:5px 8px}
+main{flex:1;padding:18px 0 12px}.welcome{background:linear-gradient(145deg,#1a2642,#121a2c);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:16px}
+.welcome h2{font-size:19px;margin:0 0 8px}.welcome p{color:var(--muted);line-height:1.5;margin:0;font-size:14px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0 18px}
+.quick button,.action{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:14px;padding:12px;text-align:left;font:inherit;font-size:13px;cursor:pointer}
+.quick button:active,.action:active{transform:scale(.98)}.quick span{display:block;font-size:18px;margin-bottom:5px}
+.messages{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}.msg{max-width:92%;padding:12px 14px;border-radius:17px;line-height:1.48;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.bot{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:5px}.user{align-self:flex-end;background:#344a84;border-bottom-right-radius:5px}
+.searchlinks{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.searchlinks a{font-size:12px;color:#d8e2ff;background:#27375c;border:1px solid #435987;padding:7px 10px;border-radius:20px;text-decoration:none}
+.composer{position:sticky;bottom:0;background:linear-gradient(180deg,#0b102000,#0b1020 18%);padding:12px 0 calc(12px + env(safe-area-inset-bottom))}
+.inputrow{display:flex;gap:8px;background:var(--panel);border:1px solid #3a496d;border-radius:18px;padding:7px}
+input{min-width:0;flex:1;background:transparent;color:var(--text);border:0;outline:0;font:inherit;font-size:15px;padding:8px}
+.send{border:0;border-radius:13px;background:var(--accent);color:#10172b;font-weight:750;padding:0 17px;font-size:16px;cursor:pointer}
+.foot{text-align:center;font-size:11px;color:#8f9bb5;margin:9px 0 2px}
+.smallbtn{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:12px;cursor:pointer}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+@media(min-width:600px){.app{padding-left:22px;padding-right:22px}.quick{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">✦</div><div><h1>Apna AI</h1><div class="sub">Tera smart search assistant</div></div><div class="status">Prototype</div></header>
+<main>
+<section class="welcome" id="welcome">
+<h2>Haan bhai, kya dhoondhna hai?</h2>
+<p>Apna AI public web search ke liye useful search links banata hai. Ye abhi early prototype hai—ye khud se private accounts access nahi karta aur na hi kisi result ko bina verify kiye sach maanta hai.</p>
+</section>
+<div class="quick" id="quick">
+<button data-q="Kisi naam ke public web results dhoondhne ke liye search plan banao"><span>🔎</span>Naam se public search</button>
+<button data-q="Instagram par public profile dhoondhne ke search links do"><span>📷</span>Public Instagram</button>
+<button data-q="Mere liye web research ka plan banao"><span>🌐</span>Web research</button>
+<button data-q="Mujhe coding seekhne aur apna AI banane mein help karo"><span>💻</span>Coding help</button>
+</div>
+<div class="messages" id="messages" aria-live="polite">
+<div class="msg bot">Namaste bhai! Main Apna AI ka pehla prototype hoon. Koi naam, username ya topic likh—main relevant public-search links bana dunga.</div>
+</div>
+</main>
+<div class="composer">
+<form class="inputrow" id="form"><input id="prompt" autocomplete="off" placeholder="Yahan likh bhai..." aria-label="Apna message"><button class="send" type="submit">➤</button></form>
+<div class="tools"><button class="smallbtn" id="clear">Chat saaf karo</button><button class="smallbtn" id="install" hidden>Install app</button><button class="smallbtn" id="help">Kaise use karein?</button></div>
+<div class="foot">Apna AI · Version 0.1 · Public information only</div>
+</div>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const messages = $('#messages');
+function addMsg(text, who='bot', links=[]){
+ const el=document.createElement('div'); el.className='msg '+who; el.textContent=text;
+ if(links.length){const wrap=document.createElement('div');wrap.className='searchlinks';links.forEach(x=>{const a=document.createElement('a');a.href=x.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=x.label;wrap.appendChild(a)});el.appendChild(wrap)}
+ messages.appendChild(el); el.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function enc(s){return encodeURIComponent(s.trim())}
+function makeLinks(q){
+ const clean=q.trim();
+ return [
+ {label:'Google Search',url:'https://www.google.com/search?q='+enc(clean)},
+ {label:'Bing Search',url:'https://www.bing.com/search?q='+enc(clean)},
+ {label:'Google Images',url:'https://www.google.com/search?tbm=isch&q='+enc(clean)},
+ {label:'Public Instagram pages',url:'https://www.google.com/search?q='+enc('site:instagram.com '+clean)},
+ {label:'Facebook public pages',url:'https://www.google.com/search?q='+enc('site:facebook.com '+clean)},
+ {label:'LinkedIn public pages',url:'https://www.google.com/search?q='+enc('site:linkedin.com '+clean)}
+ ];
+}
+function reply(q){
+ const low=q.toLowerCase();
+ if(low.includes('install')||low.includes('kaise use')||low.includes('help')){
+   return {text:'Bhai, message likh aur Send daba. Search links kholkar public pages check kar sakta hai. Agar kisi ka naam/username search kar raha hai, to city ya college jaise non-sensitive public clues add kar—lekin sirf naam se identity pakki mat maan. Is prototype mein abhi built-in language-model chat nahi hai.',links:[]};
+ }
+ if(low.includes('coding')||low.includes('ai banana')){
+   return {text:'Coding ke liye pehla step: bata tu kya banana chahta hai—chat assistant, web search, ya phone ke kaam automate karne wala tool. Abhi is app mein built-in coding model nahi juda hai; ye starter prototype hai.',links:[]};
+ }
+ const searchQ = low.includes('instagram') && !low.includes('site:') ? 'site:instagram.com '+q : q;
+ return {text:'Theek hai bhai. Neeche public web search ke links hain. Results khud verify karna—main abhi direct websites ko scan nahi kar raha, sirf search kholne mein help kar raha hoon.',links:makeLinks(searchQ)};
+}
+$('#form').addEventListener('submit',e=>{e.preventDefault();const q=$('#prompt').value.trim();if(!q)return;addMsg(q,'user');$('#prompt').value='';const r=reply(q);setTimeout(()=>addMsg(r.text,'bot',r.links),120)});
+$('#quick').addEventListener('click',e=>{const b=e.target.closest('button[data-q]');if(b){$('#prompt').value=b.dataset.q;$('#form').requestSubmit()}});
+$('#clear').addEventListener('click',()=>{messages.replaceChildren();addMsg('Chat saaf ho gayi bhai. Naya search likh.','bot')});
+$('#help').addEventListener('click',()=>addMsg(reply('kaise use karein').text,'bot'));
+let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#install').hidden=false});
+$('#install').addEventListener('click',async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('#install').hidden=true}else addMsg('Install option tabhi aayega jab app secure HTTPS website se khule aur browser installation support kare.','bot')});
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
